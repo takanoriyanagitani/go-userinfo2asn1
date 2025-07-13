@@ -1,0 +1,45 @@
+-- Basic User Information Schema
+-- This module defines a basic structure for representing user information
+-- similar to what is found in /etc/passwd on a Unix-like system.
+
+BasicUserInfo DEFINITIONS IMPLICIT TAGS ::= BEGIN
+
+    NamedGroup ::= SEQUENCE {
+        name [0] UTF8String,
+        id   [1] INTEGER
+    }
+
+    GroupKind ::= CHOICE {
+        groupNumber [0] INTEGER,
+        groupName   [1] UTF8String,
+        namedGroup  [2] NamedGroup
+    }
+
+    GroupInfo ::= SEQUENCE {
+        kind GroupKind
+    }
+
+    NamedUser ::= SEQUENCE {
+       name [0] UTF8String,
+       id   [1] INTEGER
+    }
+
+    UserKind ::= CHOICE {
+        userNumber [0] INTEGER,
+        userName   [1] UTF8String,
+        namedUser  [2] NamedUser
+    }
+
+    UserInfo ::= SEQUENCE {
+        kind UserKind
+    }
+
+    BasicUserInfo ::= SEQUENCE {
+        userID          [0] UserInfo,
+        primaryGroup    [1] GroupInfo,
+        subGroups       [2] SEQUENCE OF GroupInfo
+    }
+
+    BasicUserList ::= SEQUENCE OF BasicUserInfo
+
+END
